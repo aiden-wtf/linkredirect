@@ -3,7 +3,5 @@
 
 <h1> Usage </h1>
 To use LinkRedirect, first download/copy the file onto a UNIX system, running NGINX. Make sure you are in the same directory as the file before proceding. <br>
-Then, use the following command to start the program:
-```
-bash linkredirect.sh
-```
+Then, use `bash linkredirect.sh` to start the program.
+
