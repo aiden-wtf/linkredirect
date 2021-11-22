@@ -10,4 +10,7 @@ In order to use LinkRedirect, please follow these steps.
 - NGINX
 
 <h3> Setup: </h3>
+1) Run the file by doing <code> bash linkredirect.sh </code> <br>
+2) You should be presented with first-start steps. Follow them accordingly. <br>
+    - When presented with the question of Domain, please enter your (sub)domain without any additional tags. (ex. link.aiden.wtf, *not https://link.aiden.wtf/*) 
 
