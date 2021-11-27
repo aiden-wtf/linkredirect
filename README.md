@@ -76,6 +76,6 @@ There may be a need to update the software. When a new update is released, you w
 
 > **NOTE:** In order to push update messages, your device will request information from my API server. If this makes you uncomfortable, feel free to delete the code, present in the *start()* function. 
 
-1) First, reset ALL options to ensure a smooth transition. While the program tries to automatically reset it if a version change is detected, this may fail.
+1) First, reset ALL options to ensure a smooth transition. Some configuration settings may be new, and in order to account for those changes you need to reset all options.
 2) Then, download the new release onto your server, or copy and paste the code the new code (after deleting the old code) inside the `linkredirect.sh` file.
 3) Start the file. You may have to re-undergo the setup process.
