@@ -2,11 +2,12 @@
 
 # Made by AidenWTF - https://aiden.wtf
 # Version 1.0
-VERSION="v1.0"
+VERSION="1.0"
 
 # Config file that holds essential variables
 CONFIG="/etc/linkredirect/config.sh"
 CONFIGDIR="/etc/linkredirect/"
+API=$(curl -s -L api.aiden.wtf/linkredirect_version.sh)
 # Error messages
 error1="Error #1 - You didn't input a valid website!"
 error2="Error #2 - Your input was blank!"
@@ -21,11 +22,19 @@ echo "Welcome to LinkRedirect by AidenWTF!"
 if ! [ -d "$CONFIGDIR" ]; then
  mkdir -p $CONFIGDIR
 fi
+echo "$API" > ${CONFIGDIR}api.sh
+source ${CONFIGDIR}api.sh
 if ! [ -f "$CONFIG" ]; then
  echo "This seems like your first start. Let me create the appropriate files..."
  firstStart
 elif [ -f "$CONFIG" ]; then
  source $CONFIG
+fi
+if [ "$LATESTVERSION" = "$VERSION" ]; then
+ echo "Version is up to date! (v${VERSION})"
+else
+ echo "Out of date! Latest release is v${LATESTVERSION}. You are running v${VERSION}."
+ echo "Update at ${LATESTRELEASE}"
 fi
 if ! [ -f "${CONFIGDIR}link.db" ]; then
  echo "It seems your database file got deleted. Let me create a new one..."
@@ -79,10 +88,10 @@ read tmptwo
 if [ "$tmptwo" = "Y" ] || [ "$tmptwo" = "y" ]; then
  if [ -f "~/.bash_aliases" ]; then
   echo "alias linkredirect='bash ~/linkredirect.sh'" >> ~/.bash_aliases
-  . ~/.bashrc
+  exec bash
  else
-  echo "alias linkredirect='bash ~linkredirect.sh'" > ~/.bash_aliases
-  . ~/.bashrc
+  echo "alias linkredirect='bash ~/linkredirect.sh'" > ~/.bash_aliases
+  exec bash
  fi 
 elif [ "$tmptwo" = "N" ] || [ "$tmptwo" = "n" ]; then
  echo ""
@@ -200,7 +209,7 @@ fi
 # Help system
 help() {
 echo "---------------------------------------------------"
-echo "Help System - $VERSION"
+echo "Help System - v$VERSION"
 echo ""
 echo "The in-progam Help System is currently a WIP. Please refer to GitHub for any support issues."
 }
@@ -208,7 +217,7 @@ echo "The in-progam Help System is currently a WIP. Please refer to GitHub for a
 # Settings Menu
 settings() {
 echo "---------------------------------------------------"
-echo "Settings Menu - $VERSION"
+echo "Settings Menu - v$VERSION"
 echo ""
 echo "1) Create Alias"
 echo ""
@@ -236,7 +245,7 @@ nginxConfig() {
 echo "Creating config file for NGINX..."
 echo "server {" > $NGINX
 echo "  listen 80;" >> $NGINX
-echo "  root ${CONFIGDIR}/links/;" >> $NGINX
+echo "  root ${CONFIGDIR}links/;" >> $NGINX
 echo "  index index.html;" >> $NGINX
 echo "  server_name $DOMAIN;" >> $NGINX
 echo "  error_page 404 =200 /404.html;" >> $NGINX
@@ -297,7 +306,7 @@ fi
 # Reset Options 
 reset() {
 echo "---------------------------------------------------"
-echo "Reset Options - $VERSION"
+echo "Reset Options - v$VERSION"
 echo ""
 echo "1) Reset all options"
 echo ""
@@ -323,10 +332,15 @@ else
 fi
 }
 
-# Menu system that is the default for any non-specialized input
+credits() {
+echo "---------------------------------------------------"
+echo "Created by AidenWTF - https://aiden.wtf/"
+}
+
+# Menus  system that is the default for any non-specialized input
 menu() {
 echo "---------------------------------------------------"
-echo "Main Menu - $VERSION"
+echo "Main Menu - v$VERSION"
 echo ""
 echo "1) Shorten URL"
 echo ""
@@ -340,17 +354,17 @@ echo "5) Settings"
 echo ""
 echo "6) Credits"
 read menutmp
-if [ $menutmp == "1" ]; then
+if [ "$menutmp" == "1" ]; then
  shorten
-elif [ $menutmp == "2" ]; then
+elif [ "$menutmp" == "2" ]; then
  listURL
-elif [ $menutmp == "3" ]; then
+elif [ "$menutmp" == "3" ]; then
  deleteURL
-elif [ $menutmp == "4" ]; then
+elif [ "$menutmp" == "4" ]; then
  help
-elif [ $menutmp == "5" ]; then
+elif [ "$menutmp" == "5" ]; then
  settings
-elif [ $menutmp == "6" ]; then
+elif [ "$menutmp" == "6" ]; then
  credits
 else
  echo ""
@@ -381,6 +395,9 @@ elif [ "$1" == "credits" ]; then
 elif [ "$1" == "reset" ]; then
  start
  reset
+elif [ "$1" == "shorten" ]; then
+ start
+ shorten
 else
  start
  menu
